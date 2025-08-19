@@ -1,0 +1,8 @@
+{
+  "text.autoconfig.cntiertagger.option.selectedMode": "Game Mode",
+  "text.autoconfig.cntiertagger.option.displayRule": "Display Rule",
+  "text.autoconfig.cntiertagger.option.selectedMode.@Tooltip": "Specify the mode in which you want to (prioritize) display Tier",
+  "text.autoconfig.cntiertagger.option.displayRule.@Tooltip": "SELECED_ONLY: Only use the selected mode and do not display when players are no tier in that mode.\nHIGHEST-ONLY: Only displays the mode with the highest tier for the player. When this option is selected, the game mode option will not work\nMIXED: Prioritize using the selected mode when it has a tier, otherwise use the mode with the highest tier",
+  "category.cntiertagger.general": "CntierTagger",
+  "key.cntiertagger.showlegend": "Show Mode Icons"
+}

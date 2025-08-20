@@ -166,7 +166,7 @@ public class TierManager {
             for (String mode : data.modeTiers.keySet()) {
                 if (data.modeTiers.getOrDefault(mode, null) == null) continue;
                 var tier = data.modeTiers.get(mode);
-                if (highestTier == null || compareTiers(tier, processTierString(highestTier).replace("R","")) > 0) {
+                if (highestTier == null || compareTiers(processTierString(tier).replace("R",""), processTierString(highestTier).replace("R","")) > 0) {
                     highestTier = tier;
                     highestMode = mode;
                 }

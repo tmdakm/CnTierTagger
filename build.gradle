@@ -32,7 +32,7 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
     }
 //    modApi "com.terraformersmc:modmenu:${project.modmenu_version}"
-    modApi "com.terraformersmc:modmenu:14.0.0-rc.2"
+    modApi "com.terraformersmc:modmenu:${project.modmenu_version}"
 }
 
 processResources {

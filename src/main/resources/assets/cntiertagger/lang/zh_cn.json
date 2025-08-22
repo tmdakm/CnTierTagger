@@ -1,8 +1,11 @@
 {
+  "text.autoconfig.cntiertagger.title": "Cntier Tagger",
   "text.autoconfig.cntiertagger.option.selectedMode": "选择模式",
   "text.autoconfig.cntiertagger.option.displayRule": "显示规则",
+  "text.autoconfig.cntiertagger.option.renderLocation": "显示位置",
   "text.autoconfig.cntiertagger.option.selectedMode.@Tooltip": "选择你想要(优先)使用的模式",
   "text.autoconfig.cntiertagger.option.displayRule.@Tooltip": "SELECED_ONLY: 仅使用选择的模式，在此模式没有Tier时不显示\nHIGHEST-ONLY: 仅显示玩家tier最高的模式，在选择该项时\"选择的模式\"项无效。\nMIXED: 混合模式，在选择的模式有tier时使用选择的模式，否则使用tier最高的模式",
+  "text.autoconfig.cntiertagger.option.renderLocation.@Tooltip": "控制Tier显示在玩家名左侧(LEFT)或右侧(RIGHT)",
   "category.cntiertagger.general": "CntierTagger",
   "key.cntiertagger.showlegend": "显示模式图标"
 }

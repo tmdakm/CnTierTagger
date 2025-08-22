@@ -17,6 +17,7 @@ import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 import win.huangyu.cntiertagger.ConfigManager;
 import win.huangyu.cntiertagger.TierManager;
+import win.huangyu.cntiertagger.command.CntierCommand;
 
 import java.io.IOException;
 
@@ -28,6 +29,7 @@ public class CntiertaggerClient implements ClientModInitializer {
     public void onInitializeClient() {
         ConfigManager.register();
         tierManager.loadCache();
+        CntierCommand.register();
 
         // 按键绑定
         showLegendKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(

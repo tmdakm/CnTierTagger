@@ -2,7 +2,6 @@ package win.huangyu.cntiertagger;
 
 import com.google.gson.Gson;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
@@ -17,21 +16,33 @@ public class TierManager {
     private static final String API_URL = "https://cntier.win/api/ranking/overall";
     private static final File CACHE_FILE = new File("./config/tier_cache.json");
     private static final long CACHE_DURATION = TimeUnit.HOURS.toSeconds(4);
-    private final Map<String, PlayerData> playerMap = new ConcurrentHashMap<>();
+    public final Map<String, PlayerData> playerMap = new ConcurrentHashMap<>();
     private static final Gson GSON = new Gson();
     private Instant lastCacheTime = Instant.MIN;
 
     // 模式配置
-    private static final Map<String, TierMode> MODES = new HashMap<>();
+    public static final Map<String, TierMode> MODES = new HashMap<>();
+    public static final Map<String, Integer> TIER_COLORS = new HashMap<>();
     static {
-        MODES.put("Mace", new TierMode("🔨", "§8"));
-        MODES.put("Axe", new TierMode("🪓", "§b"));
-        MODES.put("Sword", new TierMode("🗡", "§9"));
-        MODES.put("BUHC", new TierMode("❤", "§c"));
-        MODES.put("NPOT", new TierMode("☠", "§5"));
-        MODES.put("Vanilla", new TierMode("🔮", "§d"));
-        MODES.put("Potion", new TierMode("⚗", "§d"));
-        MODES.put("SMP", new TierMode("⛨", "§8"));
+        MODES.put("Mace", new TierMode("\uE702", "§8"));
+        MODES.put("Axe", new TierMode("\uE701", "§b"));
+        MODES.put("Sword", new TierMode("\uE706", "§9"));
+        MODES.put("BUHC", new TierMode("\uE707", "§c"));
+        MODES.put("NPOT", new TierMode("\uE703", "§5"));
+        MODES.put("Vanilla", new TierMode("\uE708", "§d"));
+        MODES.put("Potion", new TierMode("\uE704", "§d"));
+        MODES.put("SMP", new TierMode("\uE705", "§8"));
+
+        TIER_COLORS.put("HT1", 0xe8ba3a);
+        TIER_COLORS.put("LT1", 0xd5b355);
+        TIER_COLORS.put("HT2", 0xc4d3e7);
+        TIER_COLORS.put("LT2", 0xa0a7b2);
+        TIER_COLORS.put("HT3", 0xf89f5a);
+        TIER_COLORS.put("LT3", 0xc67b42);
+        TIER_COLORS.put("HT4", 0x81749a);
+        TIER_COLORS.put("LT4", 0x655b79);
+        TIER_COLORS.put("HT5", 0x8f82a8);
+        TIER_COLORS.put("LT5", 0x655b79);
     }
 
 
@@ -49,25 +60,11 @@ public class TierManager {
         if(tierResult == null) return text;
         var mode = tierResult.mode;
         var tier = tierResult.tier;
-        String tierText = mode.color + mode.emoji + " §f" + tier;
-        return MutableText.of(Text.of(tierText).getContent()).append(Text.literal(" | ").formatted(Formatting.GRAY)).append(text);
-    }
-
-    static class PlayerData {
-        String uuid;
-        String name;
-        String region;
-        Map<String, String> modeTiers;
-    }
-
-    static class TierMode {
-        String emoji;
-        String color;
-
-        TierMode(String emoji, String color) {
-            this.emoji = emoji;
-            this.color = color;
-        }
+        var modeText = Text.of(mode.emoji).copy();
+        var tierText = Text.literal(tier).styled(s -> s.withColor(TIER_COLORS.getOrDefault(tier.replace("R",""),  0x655b79)));
+        return ConfigManager.getRenderLocation() == RenderLocation.LEFT ?
+                modeText.append(tierText).append(Text.literal(" | ").formatted(Formatting.GRAY)).append(text)
+                : text.copy().append(Text.literal(" | ").formatted(Formatting.GRAY)).append(tierText).append(modeText);
     }
 
     private static class CacheData {
@@ -177,7 +174,7 @@ public class TierManager {
         return null;
     }
 
-    private String processTierString(String tier) {
+    public static String processTierString(String tier) {
         // 处理退休状态
         if (tier.startsWith("Retired")) {
             return "R" + tier.replace("Retired", "").trim();

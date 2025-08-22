@@ -13,6 +13,9 @@ public class ModConfig implements ConfigData {
     @Tooltip()
     public DisplayRule displayRule = DisplayRule.HIGHEST_ONLY;
 
+    @Tooltip
+    public RenderLocation renderLocation = RenderLocation.LEFT;
+
     public static String modeToString(Mode mode){
         return switch (mode){
             case AXE -> "Axe";
@@ -28,5 +31,5 @@ public class ModConfig implements ConfigData {
 }
 
 enum RenderLocation{
-    HEAD, NAMETAG
+    LEFT, RIGHT
 }

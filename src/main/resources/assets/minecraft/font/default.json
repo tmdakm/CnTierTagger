@@ -1,0 +1,60 @@
+{
+  "providers": [
+    {
+      "type": "bitmap",
+      "file": "cntiertagger:fonts/axe.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE701"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cntiertagger:fonts/mace.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE702"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cntiertagger:fonts/npot.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE703"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cntiertagger:fonts/pot.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE704"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cntiertagger:fonts/sword.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE706"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cntiertagger:fonts/smp.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE705"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cntiertagger:fonts/buhc.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE707"]
+    },
+    {
+      "type": "bitmap",
+      "file": "cntiertagger:fonts/vanilla.png",
+      "ascent": 8,
+      "height": 8,
+      "chars": ["\uE708"]
+    }
+  ]
+}

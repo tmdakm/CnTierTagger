@@ -20,6 +20,8 @@ public class ConfigManager {
     public static Mode getSelectedMode() {
         return getConfig().selectedMode;
     }
+
+    public static RenderLocation getRenderLocation(){ return getConfig().renderLocation; }
 }
 
 enum DisplayRule {

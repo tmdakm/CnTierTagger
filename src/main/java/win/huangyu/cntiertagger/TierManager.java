@@ -43,6 +43,7 @@ public class TierManager {
         TIER_COLORS.put("LT4", 0x655b79);
         TIER_COLORS.put("HT5", 0x8f82a8);
         TIER_COLORS.put("LT5", 0x655b79);
+        TIER_COLORS.put("R", 0xa2d6ff);
     }
 
 
@@ -61,10 +62,11 @@ public class TierManager {
         var mode = tierResult.mode;
         var tier = tierResult.tier;
         var modeText = Text.of(mode.emoji).copy();
-        var tierText = Text.literal(tier).styled(s -> s.withColor(TIER_COLORS.getOrDefault(tier.replace("R",""),  0x655b79)));
+        var tierText = Text.literal(tier).styled(s -> s.withColor(tier.startsWith("R") ?
+                TIER_COLORS.get("R") : TIER_COLORS.getOrDefault(tier,  0x655b79)));
         return ConfigManager.getRenderLocation() == RenderLocation.LEFT ?
-                modeText.append(tierText).append(Text.literal(" | ").formatted(Formatting.GRAY)).append(text)
-                : text.copy().append(Text.literal(" | ").formatted(Formatting.GRAY)).append(tierText).append(modeText);
+                modeText.formatted(Formatting.RESET).append(tierText).append(Text.literal(" | ").formatted(Formatting.GRAY)).append(text)
+                : text.copy().append(Text.literal(" | ").formatted(Formatting.GRAY)).append(tierText).append(modeText.formatted(Formatting.RESET));
     }
 
     private static class CacheData {

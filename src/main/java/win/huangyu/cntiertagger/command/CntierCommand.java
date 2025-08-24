@@ -33,8 +33,11 @@ public class CntierCommand {
                                         for(var modeStr : pd.modeTiers.keySet()){
                                             if (pd.modeTiers.getOrDefault(modeStr, null) == null) continue;
                                             var mode = TierManager.MODES.get(modeStr);
-                                            var modeText = Text.of(mode.emoji).copy();
-                                            var tierText = Text.of(" §7: §f" + TierManager.processTierString(pd.modeTiers.get(modeStr)));
+                                            var modeText = Text.of(mode.emoji + " " + modeStr + " §7: ").copy();
+                                            var tierString = TierManager.processTierString(pd.modeTiers.get(modeStr));
+                                            var tierColor = tierString.startsWith("R") ?
+                                                    TierManager.TIER_COLORS.get("R") : TierManager.TIER_COLORS.getOrDefault(tierString, 0x655b79);
+                                            var tierText = Text.of(tierString).copy().styled(s -> s.withColor(tierColor));
                                             res.append(modeText).append(tierText).append("\n");
                                         }
 

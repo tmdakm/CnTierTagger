@@ -65,8 +65,8 @@ public class TierManager {
         var tierText = Text.literal(tier).styled(s -> s.withColor(tier.startsWith("R") ?
                 TIER_COLORS.get("R") : TIER_COLORS.getOrDefault(tier,  0x655b79)));
         return ConfigManager.getRenderLocation() == RenderLocation.LEFT ?
-                modeText.formatted(Formatting.RESET).append(tierText).append(Text.literal(" | ").formatted(Formatting.GRAY)).append(text)
-                : text.copy().append(Text.literal(" | ").formatted(Formatting.GRAY)).append(tierText).append(modeText.formatted(Formatting.RESET));
+                modeText.formatted(Formatting.WHITE).append(" ").append(tierText).append(Text.literal(" | ").formatted(Formatting.GRAY)).append(text) //LEFT
+                : text.copy().append(Text.literal(" | ").formatted(Formatting.GRAY)).append(tierText).append(" ").append(modeText.styled(s -> s.withColor(Formatting.WHITE)));
     }
 
     private static class CacheData {

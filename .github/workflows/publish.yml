@@ -59,3 +59,12 @@ jobs:
           asset_path: ${{ steps.mod_version.outputs.mod_file }}
           asset_name: ${{ steps.mod_version.outputs.mod_file }}
           asset_content_type: application/java-archive
+          dependencies: |-
+            [{
+                "project_id": "mOgUt4GM",
+                "dependency_type": "required"
+            },
+            {
+                "project_id": "9s6osm5g",
+                "dependency_type": "required"
+            }]

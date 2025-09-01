@@ -37,12 +37,11 @@ jobs:
           OUTPUT_FILE="build/libs/[1.21-1.21.8] CnTierTagger-$VERSION.jar"
           mv "$INPUT_FILE" "$OUTPUT_FILE"
 
-          REPLACED_VERSION = "CntierTagger $VERSION"
           # 设置输出变量供后续步骤使用
           echo "mod_file=$OUTPUT_FILE" >> $GITHUB_OUTPUT
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
           echo "FILENAME=$(basename $RENAMED_FILE)" >> $GITHUB_OUTPUT
-          echo "REPLACED_VERSION=$REPLACED_VERSION" >> $GITHUB_OUTPUT
+          echo "REPLACED_VERSION=CntierTagger $VERSION" >> $GITHUB_OUTPUT
           
       # 发布到 Modrinth
       - name: Upload to Modrinth

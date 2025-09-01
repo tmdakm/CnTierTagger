@@ -40,7 +40,7 @@ jobs:
           # 设置输出变量供后续步骤使用
           echo "mod_file=$OUTPUT_FILE" >> $GITHUB_OUTPUT
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-          echo "FILENAME=$(basename $RENAMED_FILE)" >> $GITHUB_OUTPUT
+          echo "FILENAME=$(basename $OUTPUT_FILE)" >> $GITHUB_OUTPUT
           echo "REPLACED_VERSION=CntierTagger $VERSION" >> $GITHUB_OUTPUT
           
       # 发布到 Modrinth

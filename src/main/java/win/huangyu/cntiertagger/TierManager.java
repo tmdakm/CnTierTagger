@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Nullables;
 
 import java.io.*;
 import java.net.URI;
@@ -15,7 +16,7 @@ import java.util.concurrent.*;
 public class TierManager {
     private static final String API_URL = "https://cntier.win/api/ranking/overall";
     private static final File CACHE_FILE = new File("./config/tier_cache.json");
-    private static final long CACHE_DURATION = TimeUnit.HOURS.toSeconds(4);
+    private static final long CACHE_DURATION = TimeUnit.MINUTES.toSeconds(4);
     public final Map<String, PlayerData> playerMap = new ConcurrentHashMap<>();
     private static final Gson GSON = new Gson();
     private Instant lastCacheTime = Instant.MIN;
@@ -46,6 +47,10 @@ public class TierManager {
         TIER_COLORS.put("R", 0xa2d6ff);
     }
 
+    public TierManager(){
+        refreshCache();
+        loadCache();
+    }
 
     private static class TierResult {
         public TierMode mode;
@@ -74,7 +79,7 @@ public class TierManager {
         PlayerData[] players;
     }
 
-    public void loadCache() {
+    private void loadCache() {
         try {
             if (CACHE_FILE.exists()) {
                 CacheData cache = GSON.fromJson(new FileReader(CACHE_FILE), CacheData.class);
@@ -97,34 +102,43 @@ public class TierManager {
             refreshCache();
         }
     }
+    private volatile boolean isRefreshing = false;
+    private static final long RETRY_DELAY = TimeUnit.MINUTES.toSeconds(1); // 重试间隔1分钟
+    private Instant lastRefreshAttempt = Instant.MIN;
 
-    private void refreshCache() {
-        try(ExecutorService executor = Executors.newSingleThreadExecutor()) {
-            executor.submit(() -> {
-                try (HttpClient client = HttpClient.newHttpClient()) {
-                    HttpRequest request = HttpRequest.newBuilder()
-                            .uri(URI.create(API_URL))
-                            .build();
-                    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    public void refreshCache() {
+        if (isRefreshing) return;
 
-                    PlayerData[] players = GSON.fromJson(response.body(), PlayerData[].class);
-                    playerMap.clear();
-                    for (PlayerData player : players) {
-                        playerMap.put(player.name, player);
-                    }
-
-                    saveCache(players);
-                    lastCacheTime = Instant.now();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
-            executor.shutdown();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (lastRefreshAttempt.plusSeconds(RETRY_DELAY).isAfter(Instant.now())) {
+            return;
         }
-    }
 
+        isRefreshing = true;
+        lastRefreshAttempt = Instant.now();
+
+        Executors.newSingleThreadExecutor().submit(() -> {
+            try (HttpClient client = HttpClient.newHttpClient()) {
+
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create(API_URL))
+                        .build();
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+                PlayerData[] players = GSON.fromJson(response.body(), PlayerData[].class);
+                playerMap.clear();
+                for (PlayerData player : players) {
+                    playerMap.put(player.name, player);
+                }
+
+                saveCache(players);
+                lastCacheTime = Instant.now();
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to refresh cache", e);
+            } finally {
+                isRefreshing = false;
+            }
+        });
+    }
     private void saveCache(PlayerData[] players) {
         try (FileWriter writer = new FileWriter(CACHE_FILE)) {
             CacheData cache = new CacheData();

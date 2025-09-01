@@ -28,7 +28,6 @@ public class CntiertaggerClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ConfigManager.register();
-        tierManager.loadCache();
         CntierCommand.register();
 
         // 按键绑定

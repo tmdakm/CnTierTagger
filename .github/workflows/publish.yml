@@ -4,6 +4,8 @@ on:
   release:
     types: [published] 
 
+permissions:
+  contents: write  # 显式授予写入权限
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
@@ -34,11 +36,13 @@ jobs:
           INPUT_FILE="build/libs/CnTierTagger-$VERSION.jar"
           OUTPUT_FILE="build/libs/[1.21-1.21.8] CnTierTagger-$VERSION.jar"
           mv "$INPUT_FILE" "$OUTPUT_FILE"
-          
+
           # 设置输出变量供后续步骤使用
           echo "mod_file=$OUTPUT_FILE" >> $GITHUB_OUTPUT
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "FILENAME=$(basename $OUTPUT_FILE)" >> $GITHUB_OUTPUT
+          echo "REPLACED_VERSION=CntierTagger $VERSION" >> $GITHUB_OUTPUT
+          
       # 发布到 Modrinth
       - name: Upload to Modrinth
         uses: cloudnode-pro/modrinth-publish@v2
@@ -47,18 +51,10 @@ jobs:
           project: ${{ secrets.MODRINTH_PROJECT_ID }}  # 在 Secrets 设置
           token: ${{ secrets.MODRINTH_TOKEN }}           # Modrinth API 密钥
           version: ${{ github.event.release.tag_name }}
+          name: ${{ steps.mod_version.outputs.REPLACED_VERSION }}
           changelog: ${{ github.event.release.body }}
           game-versions: '["1.20", "1.20.1", "1.20.2", "1.20.3", "1.20.4", "1.20.5", "1.20.6", "1.21", "1.21.1", "1.21.2", "1.21.3", "1.21.4", "1.21.5", "1.21.6", "1.21.7", "1.21.8", "1.21.9]'   # 适配的游戏版本
           loaders: '["fabric"]'                   # 支持的 Mod 加载器
-
-      # 上传到 GitHub Release
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ github.event.release.upload_url }} # 自动获取
-          asset_path: ${{ steps.mod_version.outputs.mod_file }}
-          asset_name: ${{ steps.mod_version.outputs.mod_file }}
-          asset_content_type: application/java-archive
           dependencies: |-
             [{
                 "project_id": "mOgUt4GM",
@@ -72,3 +68,14 @@ jobs:
                 "project_id": "P7dR8mSH",
                 "dependency_type": "required"
             }]
+
+      # 上传到 GitHub Release
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }} # 自动获取
+          asset_path: ${{ steps.mod_version.outputs.mod_file }}
+          asset_name: ${{ steps.mod_version.outputs.FILENAME }}
+          asset_content_type: application/java-archive

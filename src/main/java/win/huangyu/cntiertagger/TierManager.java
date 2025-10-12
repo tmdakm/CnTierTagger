@@ -62,13 +62,21 @@ public class TierManager {
     }
 
     public Text appendTier(PlayerEntity player, Text text) {
-        var tierResult = getPlayerTier(player.getGameProfile().getName());
+        var tierResult = getPlayerTier(PlayerNameHelper.getOriginalName(player));
         if(tierResult == null) return text;
         var mode = tierResult.mode;
         var tier = tierResult.tier;
         var modeText = Text.of(mode.emoji).copy();
-        var tierText = Text.literal(tier).styled(s -> s.withColor(tier.startsWith("R") ?
-                TIER_COLORS.get("R") : TIER_COLORS.getOrDefault(tier,  0x655b79)));
+        var retired = tier.startsWith("R");
+        var tierText = Text.of(tier.replace("R","")).copy();
+        if(!retired){
+            var tierColor = TierManager.TIER_COLORS.getOrDefault(tier, 0x655b79);
+            tierText = tierText.styled(s -> s.withColor(tierColor));
+        }else{
+            var tierColor = TierManager.TIER_COLORS.getOrDefault(tier.replace("R",""), 0x655b79);
+            var retiredText = Text.of("R").copy().styled(s -> s.withColor(TierManager.TIER_COLORS.get("R")));
+            tierText = retiredText.append(tierText.styled(s -> s.withColor(tierColor))).copy();
+        }
         return ConfigManager.getRenderLocation() == RenderLocation.LEFT ?
                 modeText.formatted(Formatting.WHITE).append(" ").append(tierText).append(Text.literal(" | ").formatted(Formatting.GRAY)).append(text) //LEFT
                 : text.copy().append(Text.literal(" | ").formatted(Formatting.GRAY)).append(tierText).append(" ").append(modeText.styled(s -> s.withColor(Formatting.WHITE)));

@@ -48,7 +48,7 @@ jobs:
           token: ${{ secrets.MODRINTH_TOKEN }}           # Modrinth API 密钥
           version: ${{ github.event.release.tag_name }}
           changelog: ${{ github.event.release.body }}
-          game-versions: '["1.21", "1.21.1", "1.21.2", "1.21.3", "1.21.4", "1.21.5", "1.21.6", "1.21.7", "1.21.8"]'   # 适配的游戏版本
+          game-versions: '["1.20", "1.20.1", "1.20.2", "1.20.3", "1.20.4", "1.20.5", "1.20.6", "1.21", "1.21.1", "1.21.2", "1.21.3", "1.21.4", "1.21.5", "1.21.6", "1.21.7", "1.21.8", "1.21.9]'   # 适配的游戏版本
           loaders: '["fabric"]'                   # 支持的 Mod 加载器
 
       # 上传到 GitHub Release
@@ -66,5 +66,9 @@ jobs:
             },
             {
                 "project_id": "9s6osm5g",
+                "dependency_type": "required"
+            },
+            {
+                "project_id": "P7dR8mSH",
                 "dependency_type": "required"
             }]

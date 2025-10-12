@@ -23,21 +23,30 @@ public class CntierCommand {
                             .then(argument("player", StringArgumentType.string())
                                     .executes((context) -> {
                                         var player = context.getArgument("player", String.class);
-                                        PlayerData pd = CntiertaggerClient.tierManager.playerMap.getOrDefault(player, null);
+                                        var key = CntiertaggerClient.tierManager.playerMap.keySet().stream().filter(str -> str.equalsIgnoreCase(player)).findFirst();
+                                        PlayerData pd = null;
+                                        if(key.isPresent()) pd = CntiertaggerClient.tierManager.playerMap.get(key.get());
                                         if(pd == null){
                                             context.getSource().sendError(Text.literal("该玩家没有Tier！"));
                                             return 1;
                                         }
 
-                                        MutableText res = MutableText.of(Text.of(String.format("§e========%s's Tier========\n", player)).getContent());
+                                        MutableText res = MutableText.of(Text.of(String.format("§e========%s's Tier========\n", key.get())).getContent());
                                         for(var modeStr : pd.modeTiers.keySet()){
                                             if (pd.modeTiers.getOrDefault(modeStr, null) == null) continue;
                                             var mode = TierManager.MODES.get(modeStr);
                                             var modeText = Text.of(mode.emoji + " " + modeStr + " §7: ").copy();
                                             var tierString = TierManager.processTierString(pd.modeTiers.get(modeStr));
-                                            var tierColor = tierString.startsWith("R") ?
-                                                    TierManager.TIER_COLORS.get("R") : TierManager.TIER_COLORS.getOrDefault(tierString, 0x655b79);
-                                            var tierText = Text.of(tierString).copy().styled(s -> s.withColor(tierColor));
+                                            var retired = tierString.startsWith("R");
+                                            var tierText = Text.of(tierString.replace("R","")).copy();
+                                            if(!retired){
+                                                var tierColor = TierManager.TIER_COLORS.getOrDefault(tierString, 0x655b79);
+                                                tierText = tierText.styled(s -> s.withColor(tierColor));
+                                            }else{
+                                                var tierColor = TierManager.TIER_COLORS.getOrDefault(tierString.replace("R",""), 0x655b79);
+                                                var retiredText = Text.of("R").copy().styled(s -> s.withColor(TierManager.TIER_COLORS.get("R")));
+                                                tierText = retiredText.append(tierText.styled(s -> s.withColor(tierColor))).copy();
+                                            }
                                             res.append(modeText).append(tierText).append("\n");
                                         }
 

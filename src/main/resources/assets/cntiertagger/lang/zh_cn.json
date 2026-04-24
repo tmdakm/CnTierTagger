@@ -7,5 +7,18 @@
   "text.autoconfig.cntiertagger.option.displayRule.@Tooltip": "SELECED_ONLY: 仅使用选择的模式，在此模式没有Tier时不显示\nHIGHEST-ONLY: 仅显示玩家tier最高的模式，在选择该项时\"选择的模式\"项无效。\nMIXED: 混合模式，在选择的模式有tier时使用选择的模式，否则使用tier最高的模式",
   "text.autoconfig.cntiertagger.option.renderLocation.@Tooltip": "控制Tier显示在玩家名左侧(LEFT)或右侧(RIGHT)",
   "category.cntiertagger.general": "CntierTagger",
-  "key.cntiertagger.showlegend": "显示模式图标"
+  "key.cntiertagger.showlegend": "显示模式图标",
+  "text.autoconfig.cntiertagger.option.HT1": "一阶高段 (High Tier 1)",
+  "text.autoconfig.cntiertagger.option.LT1": "一阶低段 (Low Tier 1)",
+  "text.autoconfig.cntiertagger.option.HT2": "二阶高段 (High Tier 2)",
+  "text.autoconfig.cntiertagger.option.LT2": "二阶低段 (Low Tier 2)",
+  "text.autoconfig.cntiertagger.option.HT3": "三阶高段 (High Tier 3)",
+  "text.autoconfig.cntiertagger.option.LT3": "三阶低段 (Low Tier 3)",
+  "text.autoconfig.cntiertagger.option.HT4": "四阶高段 (High Tier 4)",
+  "text.autoconfig.cntiertagger.option.LT4": "四阶低段 (Low Tier 4)",
+  "text.autoconfig.cntiertagger.option.HT5": "五阶高段 (High Tier 5)",
+  "text.autoconfig.cntiertagger.option.LT5": "五阶低段 (Low Tier 5)",
+  "text.autoconfig.cntiertagger.option.Retired": "退役",
+  "text.autoconfig.cntiertagger.option.enableMod": "启用模组",
+  "text.autoconfig.cntiertagger.option.showOnPlayerList": "在Tab玩家列表中显示Tier"
 }

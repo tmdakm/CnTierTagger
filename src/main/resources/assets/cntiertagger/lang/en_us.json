@@ -7,5 +7,18 @@
   "text.autoconfig.cntiertagger.option.displayRule.@Tooltip": "SELECED_ONLY: Only use the selected mode and do not display when players are no tier in that mode.\nHIGHEST-ONLY: Only displays the mode with the highest tier for the player. When this option is selected, the game mode option will not work\nMIXED: Prioritize using the selected mode when it has a tier, otherwise use the mode with the highest tier",
   "text.autoconfig.cntiertagger.option.renderLocation.@Tooltip": "Control the display of Tier on the right or left side of the nametag",
   "category.cntiertagger.general": "CntierTagger",
-  "key.cntiertagger.showlegend": "Show Mode Icons"
+  "key.cntiertagger.showlegend": "Show Mode Icons",
+  "text.autoconfig.cntiertagger.option.HT1": "High Tier 1",
+  "text.autoconfig.cntiertagger.option.LT1": "Low Tier 1",
+  "text.autoconfig.cntiertagger.option.HT2": "High Tier 2",
+  "text.autoconfig.cntiertagger.option.LT2": "Low Tier 2",
+  "text.autoconfig.cntiertagger.option.HT3": "High Tier 3",
+  "text.autoconfig.cntiertagger.option.LT3": "Low Tier 3",
+  "text.autoconfig.cntiertagger.option.HT4": "High Tier 4",
+  "text.autoconfig.cntiertagger.option.LT4": "Low Tier 4",
+  "text.autoconfig.cntiertagger.option.HT5": "High Tier 5",
+  "text.autoconfig.cntiertagger.option.LT5": "Low Tier 5",
+  "text.autoconfig.cntiertagger.option.Retired": "Retired",
+  "text.autoconfig.cntiertagger.option.enableMod": "Enable Mod",
+  "text.autoconfig.cntiertagger.option.showOnPlayerList": "Show tiers on Tab player list"
 }

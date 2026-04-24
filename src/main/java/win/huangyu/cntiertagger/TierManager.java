@@ -1,10 +1,10 @@
 package win.huangyu.cntiertagger;
 
 import com.google.gson.Gson;
+import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Nullables;
 
 import java.io.*;
 import java.net.URI;
@@ -23,7 +23,6 @@ public class TierManager {
 
     // 模式配置
     public static final Map<String, TierMode> MODES = new HashMap<>();
-    public static final Map<String, Integer> TIER_COLORS = new HashMap<>();
     static {
         MODES.put("Mace", new TierMode("\uE702", "§8"));
         MODES.put("Axe", new TierMode("\uE701", "§b"));
@@ -34,17 +33,6 @@ public class TierManager {
         MODES.put("Potion", new TierMode("\uE704", "§d"));
         MODES.put("SMP", new TierMode("\uE705", "§8"));
 
-        TIER_COLORS.put("HT1", 0xe8ba3a);
-        TIER_COLORS.put("LT1", 0xd5b355);
-        TIER_COLORS.put("HT2", 0xc4d3e7);
-        TIER_COLORS.put("LT2", 0xa0a7b2);
-        TIER_COLORS.put("HT3", 0xf89f5a);
-        TIER_COLORS.put("LT3", 0xc67b42);
-        TIER_COLORS.put("HT4", 0x81749a);
-        TIER_COLORS.put("LT4", 0x655b79);
-        TIER_COLORS.put("HT5", 0x8f82a8);
-        TIER_COLORS.put("LT5", 0x655b79);
-        TIER_COLORS.put("R", 0xa2d6ff);
     }
 
     public TierManager(){
@@ -52,7 +40,7 @@ public class TierManager {
         loadCache();
     }
 
-    private static class TierResult {
+    public static class TierResult {
         public TierMode mode;
         public String tier;
         public TierResult(TierMode mode, String tier){
@@ -63,6 +51,17 @@ public class TierManager {
 
     public Text appendTier(PlayerEntity player, Text text) {
         var tierResult = getPlayerTier(PlayerNameHelper.getOriginalName(player));
+        return appendTier(tierResult, text);
+    }
+
+
+    public Text appendTier(GameProfile profile, Text text) {
+        var tierResult = getPlayerTier(profile.name());
+        return appendTier(tierResult, text);
+    }
+
+    public Text appendTier(TierResult tierResult, Text text) {
+        var config = ConfigManager.getConfig();
         if(tierResult == null) return text;
         var mode = tierResult.mode;
         var tier = tierResult.tier;
@@ -70,11 +69,11 @@ public class TierManager {
         var retired = tier.startsWith("R");
         var tierText = Text.of(tier.replace("R","")).copy();
         if(!retired){
-            var tierColor = TierManager.TIER_COLORS.getOrDefault(tier, 0x655b79);
+            var tierColor = config.getColorForTier(tier);
             tierText = tierText.styled(s -> s.withColor(tierColor));
         }else{
-            var tierColor = TierManager.TIER_COLORS.getOrDefault(tier.replace("R",""), 0x655b79);
-            var retiredText = Text.of("R").copy().styled(s -> s.withColor(TierManager.TIER_COLORS.get("R")));
+            var tierColor = config.getColorForTier(tier.replace("R",""));
+            var retiredText = Text.of("R").copy().styled(s -> s.withColor(config.getColorForTier("R")));
             tierText = retiredText.append(tierText.styled(s -> s.withColor(tierColor))).copy();
         }
         return ConfigManager.getRenderLocation() == RenderLocation.LEFT ?

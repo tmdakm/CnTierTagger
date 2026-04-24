@@ -8,6 +8,7 @@ import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import win.huangyu.cntiertagger.ConfigManager;
 import win.huangyu.cntiertagger.PlayerData;
 import win.huangyu.cntiertagger.TierManager;
 import win.huangyu.cntiertagger.client.CntiertaggerClient;
@@ -32,6 +33,7 @@ public class CntierCommand {
                                         }
 
                                         MutableText res = MutableText.of(Text.of(String.format("§e========%s's Tier========\n", key.get())).getContent());
+                                        var config = ConfigManager.getConfig();
                                         for(var modeStr : pd.modeTiers.keySet()){
                                             if (pd.modeTiers.getOrDefault(modeStr, null) == null) continue;
                                             var mode = TierManager.MODES.get(modeStr);
@@ -40,11 +42,11 @@ public class CntierCommand {
                                             var retired = tierString.startsWith("R");
                                             var tierText = Text.of(tierString.replace("R","")).copy();
                                             if(!retired){
-                                                var tierColor = TierManager.TIER_COLORS.getOrDefault(tierString, 0x655b79);
+                                                var tierColor = config.getColorForTier(tierString);
                                                 tierText = tierText.styled(s -> s.withColor(tierColor));
                                             }else{
-                                                var tierColor = TierManager.TIER_COLORS.getOrDefault(tierString.replace("R",""), 0x655b79);
-                                                var retiredText = Text.of("R").copy().styled(s -> s.withColor(TierManager.TIER_COLORS.get("R")));
+                                                var tierColor = config.getColorForTier(tierString.replace("R",""));
+                                                var retiredText = Text.of("R").copy().styled(s -> s.withColor(config.getColorForTier("R")));
                                                 tierText = retiredText.append(tierText.styled(s -> s.withColor(tierColor))).copy();
                                             }
                                             res.append(modeText).append(tierText).append("\n");

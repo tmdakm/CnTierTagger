@@ -3,7 +3,8 @@
   "package": "win.huangyu.cntiertagger.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
-    "PlayerEntityMixin"
+    "PlayerEntityMixin",
+    "PlayerListHudMixin"
   ],
   "injectors": {
     "defaultRequire": 1

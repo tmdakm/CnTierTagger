@@ -1,20 +1,17 @@
 package win.huangyu.cntiertagger.command;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.command.argument.EntityArgumentType;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import win.huangyu.cntiertagger.ConfigManager;
 import win.huangyu.cntiertagger.PlayerData;
 import win.huangyu.cntiertagger.TierManager;
 import win.huangyu.cntiertagger.client.CntiertaggerClient;
 
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.argument;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.literal;
 
 public class CntierCommand {
     public static void register(){
@@ -28,26 +25,26 @@ public class CntierCommand {
                                         PlayerData pd = null;
                                         if(key.isPresent()) pd = CntiertaggerClient.tierManager.playerMap.get(key.get());
                                         if(pd == null){
-                                            context.getSource().sendError(Text.literal("该玩家没有Tier！"));
+                                            context.getSource().sendError(Component.literal("该玩家没有Tier！"));
                                             return 1;
                                         }
 
-                                        MutableText res = MutableText.of(Text.of(String.format("§e========%s's Tier========\n", key.get())).getContent());
+                                        MutableComponent res = Component.literal(String.format("§e========%s's Tier========\n", key.get()));
                                         var config = ConfigManager.getConfig();
                                         for(var modeStr : pd.modeTiers.keySet()){
                                             if (pd.modeTiers.getOrDefault(modeStr, null) == null) continue;
                                             var mode = TierManager.MODES.get(modeStr);
-                                            var modeText = Text.of(mode.emoji + " " + modeStr + " §7: ").copy();
+                                            var modeText = Component.literal(mode.emoji + " " + modeStr + " §7: ");
                                             var tierString = TierManager.processTierString(pd.modeTiers.get(modeStr));
                                             var retired = tierString.startsWith("R");
-                                            var tierText = Text.of(tierString.replace("R","")).copy();
+                                            var tierText = Component.literal(tierString.replace("R", ""));
                                             if(!retired){
                                                 var tierColor = config.getColorForTier(tierString);
-                                                tierText = tierText.styled(s -> s.withColor(tierColor));
+                                                tierText = tierText.withStyle(s -> s.withColor(tierColor));
                                             }else{
                                                 var tierColor = config.getColorForTier(tierString.replace("R",""));
-                                                var retiredText = Text.of("R").copy().styled(s -> s.withColor(config.getColorForTier("R")));
-                                                tierText = retiredText.append(tierText.styled(s -> s.withColor(tierColor))).copy();
+                                                var retiredText = Component.literal("R").withStyle(s -> s.withColor(config.getColorForTier("R")));
+                                                tierText = retiredText.append(tierText.withStyle(s -> s.withColor(tierColor))).copy();
                                             }
                                             res.append(modeText).append(tierText).append("\n");
                                         }

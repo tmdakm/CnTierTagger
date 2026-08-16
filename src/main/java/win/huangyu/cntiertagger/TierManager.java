@@ -2,9 +2,9 @@ package win.huangyu.cntiertagger;
 
 import com.google.gson.Gson;
 import com.mojang.authlib.GameProfile;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 
 import java.io.*;
 import java.net.URI;
@@ -49,36 +49,36 @@ public class TierManager {
         }
     }
 
-    public Text appendTier(PlayerEntity player, Text text) {
+    public Component appendTier(Player player, Component text) {
         var tierResult = getPlayerTier(PlayerNameHelper.getOriginalName(player));
         return appendTier(tierResult, text);
     }
 
 
-    public Text appendTier(GameProfile profile, Text text) {
+    public Component appendTier(GameProfile profile, Component text) {
         var tierResult = getPlayerTier(profile.name());
         return appendTier(tierResult, text);
     }
 
-    public Text appendTier(TierResult tierResult, Text text) {
+    public Component appendTier(TierResult tierResult, Component text) {
         var config = ConfigManager.getConfig();
         if(tierResult == null) return text;
         var mode = tierResult.mode;
         var tier = tierResult.tier;
-        var modeText = Text.of(mode.emoji).copy();
+        var modeText = Component.literal(mode.emoji);
         var retired = tier.startsWith("R");
-        var tierText = Text.of(tier.replace("R","")).copy();
+        var tierText = Component.literal(tier.replace("R", ""));
         if(!retired){
             var tierColor = config.getColorForTier(tier);
-            tierText = tierText.styled(s -> s.withColor(tierColor));
+            tierText = tierText.withStyle(s -> s.withColor(tierColor));
         }else{
             var tierColor = config.getColorForTier(tier.replace("R",""));
-            var retiredText = Text.of("R").copy().styled(s -> s.withColor(config.getColorForTier("R")));
-            tierText = retiredText.append(tierText.styled(s -> s.withColor(tierColor))).copy();
+            var retiredText = Component.literal("R").withStyle(s -> s.withColor(config.getColorForTier("R")));
+            tierText = retiredText.append(tierText.withStyle(s -> s.withColor(tierColor))).copy();
         }
         return ConfigManager.getRenderLocation() == RenderLocation.LEFT ?
-                modeText.formatted(Formatting.WHITE).append(" ").append(tierText).append(Text.literal(" | ").formatted(Formatting.GRAY)).append(text) //LEFT
-                : text.copy().append(Text.literal(" | ").formatted(Formatting.GRAY)).append(tierText).append(" ").append(modeText.styled(s -> s.withColor(Formatting.WHITE)));
+                modeText.withStyle(ChatFormatting.WHITE).append(" ").append(tierText).append(Component.literal(" | ").withStyle(ChatFormatting.GRAY)).append(text) //LEFT
+                : text.copy().append(Component.literal(" | ").withStyle(ChatFormatting.GRAY)).append(tierText).append(" ").append(modeText.withStyle(s -> s.withColor(ChatFormatting.WHITE)));
     }
 
     private static class CacheData {

@@ -1,20 +1,19 @@
 package win.huangyu.cntiertagger.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import win.huangyu.cntiertagger.ConfigManager;
 import win.huangyu.cntiertagger.client.CntiertaggerClient;
 
-@Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixin {
+@Mixin(Player.class)
+public abstract class PlayerMixin {
     @ModifyReturnValue(method = "getDisplayName", at = @At("RETURN"))
-    public Text prependTier(Text original) {
+    public Component prependTier(Component original) {
         if(!ConfigManager.getConfig().enableMod) return original;
-        PlayerEntity self = (PlayerEntity) (Object) this;
+        Player self = (Player) (Object) this;
         return CntiertaggerClient.tierManager.appendTier(self, original);
     }
 }

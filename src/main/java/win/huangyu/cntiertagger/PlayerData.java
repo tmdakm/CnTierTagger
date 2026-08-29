@@ -8,3 +8,4 @@ public class PlayerData {
     public String region;
     public Map<String, String> modeTiers;
 }
+

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "cntiertagger",
-  "version": "${version}",
+  "version": "1.7.3",
   "name": "CnTierTagger",
   "description": "A mod that fetch and display tiers on cntier.win.",
   "authors": ["Huangyu"],
@@ -25,7 +25,7 @@
     ]
   },
   "depends": {
-    "fabricloader": ">=${loader_version}",
+    "fabricloader": ">=0.19.3",
     "minecraft": ">=26.1 <26.3",
     "modmenu": "*",
     "cloth-config": "*"

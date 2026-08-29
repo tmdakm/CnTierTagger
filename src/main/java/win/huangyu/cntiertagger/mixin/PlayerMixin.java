@@ -8,12 +8,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import win.huangyu.cntiertagger.ConfigManager;
 import win.huangyu.cntiertagger.client.CntiertaggerClient;
 
-@Mixin(Player.class)
+@Mixin(value={Player.class})
 public abstract class PlayerMixin {
-    @ModifyReturnValue(method = "getDisplayName", at = @At("RETURN"))
+    @ModifyReturnValue(method={"getDisplayName"}, at={@At(value="RETURN")})
     public Component prependTier(Component original) {
-        if(!ConfigManager.getConfig().enableMod) return original;
-        Player self = (Player) (Object) this;
+        if (!ConfigManager.getConfig().enableMod) {
+            return original;
+        }
+        Player self = (Player)this;
         return CntiertaggerClient.tierManager.appendTier(self, original);
     }
 }
+

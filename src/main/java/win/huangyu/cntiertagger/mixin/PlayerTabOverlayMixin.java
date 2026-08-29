@@ -9,17 +9,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import win.huangyu.cntiertagger.ConfigManager;
 import win.huangyu.cntiertagger.client.CntiertaggerClient;
 
-@Mixin(value={PlayerTabOverlay.class})
+@Mixin(PlayerTabOverlay.class)
 public class PlayerTabOverlayMixin {
-    @ModifyReturnValue(method={"getNameForDisplay"}, at={@At(value="RETURN")})
+    @ModifyReturnValue(method = "getNameForDisplay", at = @At("RETURN"))
     public Component prependTier(Component original, PlayerInfo entry) {
-        if (!ConfigManager.getConfig().enableMod) {
-            return original;
-        }
-        if (!ConfigManager.getConfig().showOnPlayerList) {
-            return original;
-        }
+        if(!ConfigManager.getConfig().enableMod) return original;
+        if(!ConfigManager.getConfig().showOnPlayerList) return original;
         return CntiertaggerClient.tierManager.appendTier(entry.getProfile(), original);
     }
 }
-

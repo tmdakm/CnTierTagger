@@ -1,7 +1,6 @@
 package win.huangyu.cntiertagger;
-
-import com.mojang.authlib.GameProfile;
 import net.minecraft.world.entity.player.Player;
+import com.mojang.authlib.GameProfile;
 
 public class PlayerNameHelper {
     public static String getOriginalName(Player player) {
@@ -9,4 +8,3 @@ public class PlayerNameHelper {
         return profile.name();
     }
 }
-

@@ -9,4 +9,3 @@ public class TierMode {
         this.color = color;
     }
 }
-

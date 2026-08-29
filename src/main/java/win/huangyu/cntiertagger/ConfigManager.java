@@ -2,30 +2,33 @@ package win.huangyu.cntiertagger;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
-import win.huangyu.cntiertagger.DisplayRule;
-import win.huangyu.cntiertagger.ModConfig;
-import win.huangyu.cntiertagger.Mode;
-import win.huangyu.cntiertagger.RenderLocation;
 
 public class ConfigManager {
-    public static void register() {
+    public static void register(){
         AutoConfig.register(ModConfig.class, GsonConfigSerializer::new);
     }
 
-    public static ModConfig getConfig() {
-        return (ModConfig)AutoConfig.getConfigHolder(ModConfig.class).getConfig();
+    public static ModConfig getConfig(){
+        return AutoConfig.getConfigHolder(ModConfig.class).getConfig();
     }
 
+
     public static DisplayRule getDisplayRule() {
-        return ConfigManager.getConfig().displayRule;
+        return getConfig().displayRule;
     }
 
     public static Mode getSelectedMode() {
-        return ConfigManager.getConfig().selectedMode;
+        return getConfig().selectedMode;
     }
 
-    public static RenderLocation getRenderLocation() {
-        return ConfigManager.getConfig().renderLocation;
-    }
+    public static RenderLocation getRenderLocation(){ return getConfig().renderLocation; }
+}
+
+enum DisplayRule {
+    SELECTED_ONLY, HIGHEST_ONLY, MIXED
+}
+
+enum Mode {
+    AXE, BUILDUHC, NPOT, VANILLA, SMP, MACE, SWORD, POTION
 }
 
